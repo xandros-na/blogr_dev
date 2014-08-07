@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Blogr</title>
+        <link rel=stylesheet  href="{{ url_for('static', filename='bootstrap.css') }}">
+    </head>
+    <body>
+        <header>
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><a href="{{ url_for('show_entries') }}">Blogr</a></li>
+                        {% if not session.logged_in %}
+                        <li><a href="{{ url_for('login') }}">Log in</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+        {% for msg in get_flashed_messages() %}
+            <ul class=entries>{{ msg }}</ul>
+        {% endfor %}
+        </div>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+<html>

@@ -7,7 +7,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
+venv/
 bin/
 build/
 develop-eggs/
@@ -92,3 +92,6 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+#databases
+*.db
