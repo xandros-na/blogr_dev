@@ -1,5 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
+<script type="text/javascript">
+var mylist = [];
+setInterval(function() {
+        $.getJSON($SCRIPT_ROOT + '/test', {},
+            function(data) {
+                mylist=data
+            });
+
+        function makeUL(array) {
+            var list = document.createElement('ul');
+            for (var i=0; i<array.length; i++) {
+                var item = document.createElement('li');
+                item.appendChild(document.createTextNode(array[i][0]));
+                list.appendChild(item);
+            }
+            return list;
+        }
+        document.getElementById('btitle').appendChild(makeUL(mylist));
+        },5000);
+</script>
     {% if session.logged_in %}
     <ul class=entries>
         <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
@@ -8,16 +28,12 @@
                 <dd><input type=text size=30 name=title>
                 <dt>Text:
                 <dd><textarea name=text rows=5 cols=40></textarea>
-                <dd><input type=submit value=Share>
+                <dd><input id="share" type=submit value=Share>
             </dl>
         </form>
     </ul>
     {% endif %}
     <ul class=entries>
-    {% for entry in entries %}
-        <h2>{{ entry.title }}</h2><p>{{ entry.text|safe }}</p>
-    {% else %}
-        <em>No entries here so far</em>
-    {% endfor %}
+        <h2 id="btitle"></h2><p id="btext"></p>
     </ul>
 {% endblock %}

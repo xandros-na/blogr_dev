@@ -1,16 +1,31 @@
 import sqlite3
+import json
 from app import app, get_db
-from flask import render_template, request, url_for, redirect, session, g, flash
+from flask import render_template, request, url_for, redirect, session, g, \
+    flash, abort, jsonify, Response
+
+@app.route('/test')
+def test():
+    mylist = []
+    db = get_db()
+    cur = db.execute('select title, text from entries order by id desc')
+    entries = cur.fetchall()
+    for entry in entries:
+        mydict = []
+        mydict.append(entry[0])
+        mydict.append(entry[1])
+        mylist.append(mydict)
+    return Response(json.dumps(mylist))
 
 @app.route('/')
 def show_entries():
     """gets a db and executes a SQL statement
     fetchall() - fetches all rows of a query result - returns a list
     """
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    #db = get_db()
+    #cur = db.execute('select title, text from entries order by id desc')
+    #entries = cur.fetchall()
+    return render_template('show_entries.html')
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -23,6 +38,8 @@ def add_entry():
         # (?, ?) - used to avoid SQL injection
         db.commit()
         flash('New entry successfully posted!')
+        global dblength
+        dblength += 1
     else:
         flash('Must enter a title and text')
     return redirect(url_for('show_entries'))
