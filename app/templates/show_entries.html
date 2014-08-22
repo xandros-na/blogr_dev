@@ -8,16 +8,11 @@ setInterval(function() {
                 mylist=data
             });
 
-        function makeUL(array) {
-            var list = document.createElement('ul');
-            for (var i=0; i<array.length; i++) {
-                var item = document.createElement('li');
-                item.appendChild(document.createTextNode(array[i][0]));
-                list.appendChild(item);
-            }
-            return list;
-        }
-        document.getElementById('btitle').appendChild(makeUL(mylist));
+        $(document).ready(function() {
+            var x = document.createElement("p");
+            x.innerHTML = "xxx";
+            $("#btitle").after("<h2>jjj</h2>", x);
+            });
         },5000);
 </script>
     {% if session.logged_in %}
@@ -33,7 +28,5 @@ setInterval(function() {
         </form>
     </ul>
     {% endif %}
-    <ul class=entries>
-        <h2 id="btitle"></h2><p id="btext"></p>
-    </ul>
+        <h2 id="btitle"></h2>
 {% endblock %}
