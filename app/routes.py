@@ -4,6 +4,11 @@ from app import app, get_db
 from flask import render_template, request, url_for, redirect, session, g, \
     flash, abort, jsonify, Response
 
+@app.route('/getx')
+def getx():
+    print('here', request.args.get('name'))
+    return Response('test')
+
 @app.route('/test')
 def test():
     mylist = []

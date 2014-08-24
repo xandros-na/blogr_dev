@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
 <script type="text/javascript">
+$.get($SCRIPT_ROOT + '/getx', 'name=lol', function(data) {console.log(data);});
 var mylist = [];
+var n = $('#titles').length;
 setInterval(function() {
         $.getJSON($SCRIPT_ROOT + '/test', {},
             function(data) {
@@ -9,15 +11,15 @@ setInterval(function() {
             });
 
         $(document).ready(function() {
+            console.log(n);
             for (var i = mylist.length-1; i > -1; i--) {
-                var x = document.createElement("p");
-                x.innerHTML = mylist[i][1];
-                var y = document.createElement("h2");
-                y.innerHTML = mylist[i][0];
-                $("#btitle").after(y, x);
+                if ( n < mylist.length) {
+                $("#btitle").after('<h2 id="titles">' + mylist[i][0] + '</h2><p>' + mylist[i][1] + '</p>');
+                    n++;
+                }
             }
             });
-        },5000);
+        },1000);
 </script>
     {% if session.logged_in %}
     <ul class=entries>
