@@ -1,22 +1,28 @@
 import sqlite3
 import json
 from app import app, get_db
+from datetime import datetime as datetime
 from flask import render_template, request, url_for, redirect, session, g, \
     flash, abort, jsonify, Response
 
-@app.route('/getx')
-def getx():
-    print('here', request.args.get('name'))
-    return Response('test')
-
-@app.route('/test')
+now = None
+@app.route('/test', methods = ['GET'])
 def test():
+    jstime = int(request.args.get('time'))
+    pydate = datetime.fromtimestamp(jstime/1000)
+    if now is not None:
+        print(now > pydate)
+        print('now', now)
+        print('pyd', pydate)
     mylist = []
     db = get_db()
     cur = db.execute('select title, text from entries order by id desc')
+    #cur = db.execute('select title, text from entries order by id desc limit 1')
     entries = cur.fetchall()
     for entry in entries:
         mydict = []
+        print(entry[0])
+        print(entry[1])
         mydict.append(entry[0])
         mydict.append(entry[1])
         mylist.append(mydict)
@@ -42,9 +48,9 @@ def add_entry():
                 [request.form['title'], request.form['text']])
         # (?, ?) - used to avoid SQL injection
         db.commit()
+        global now
+        now = datetime.now()
         flash('New entry successfully posted!')
-        global dblength
-        dblength += 1
     else:
         flash('Must enter a title and text')
     return redirect(url_for('show_entries'))

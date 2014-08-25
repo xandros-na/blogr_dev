@@ -1,25 +1,24 @@
 {% extends "layout.html" %}
 {% block body %}
 <script type="text/javascript">
-$.get($SCRIPT_ROOT + '/getx', 'name=lol', function(data) {console.log(data);});
-var mylist = [];
+var aDate = new Date().getTime();
 var n = $('#titles').length;
+var mylist = [];
+
 setInterval(function() {
-        $.getJSON($SCRIPT_ROOT + '/test', {},
+        $.getJSON($SCRIPT_ROOT + '/test', {'time':aDate},
             function(data) {
                 mylist=data
+                for (var i = 0; i < mylist.length; i++) {
+                    if ( n < mylist.length) {
+                        $("#top").after('<h2 id="titles' + n + '">' + mylist[i][0] + '</h2><p>' + mylist[i][1] + '</p>');
+                        n++;
+                    }
+                }
+                return false;
             });
 
-        $(document).ready(function() {
-            console.log(n);
-            for (var i = mylist.length-1; i > -1; i--) {
-                if ( n < mylist.length) {
-                $("#btitle").after('<h2 id="titles">' + mylist[i][0] + '</h2><p>' + mylist[i][1] + '</p>');
-                    n++;
-                }
-            }
-            });
-        },1000);
+        },3000);
 </script>
     {% if session.logged_in %}
     <ul class=entries>
@@ -34,5 +33,6 @@ setInterval(function() {
         </form>
     </ul>
     {% endif %}
-        <h2 id="btitle"></h2>
+        <h2 id="top">TOP</h2>
+        <h2 id="bot">BOT</h2>
 {% endblock %}
